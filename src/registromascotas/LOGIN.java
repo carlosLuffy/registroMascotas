@@ -67,11 +67,26 @@ public class LOGIN extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Student-login-icon.png"))); // NOI18N
 
         usuario.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usuarioActionPerformed(evt);
+            }
+        });
+        usuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                usuarioKeyTyped(evt);
+            }
+        });
 
         password.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         password.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 passwordActionPerformed(evt);
+            }
+        });
+        password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                passwordKeyTyped(evt);
             }
         });
 
@@ -126,9 +141,35 @@ public class LOGIN extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordActionPerformed
 
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
-        this.setVisible(false);
-        ventana2.setVisible(true);
+        
+        if (password.getText().length()<=8 && usuario.getText().length()<=5){
+            JOptionPane.showMessageDialog(null, "CONTRASEÑA O USUARIO MUY CORTO");
+        }
+        else {this.setVisible(false);
+             ventana2.setVisible(true);}
+        
     }//GEN-LAST:event_registrarActionPerformed
+
+    private void usuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usuarioKeyTyped
+        int caracteres=15;
+       
+       if (usuario.getText().length()>=caracteres){
+           evt.consume();
+       }
+    }//GEN-LAST:event_usuarioKeyTyped
+
+    private void passwordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyTyped
+         int caracteres=15;
+        
+       
+       if (password.getText().length()>=caracteres ){
+           evt.consume();
+       }
+    }//GEN-LAST:event_passwordKeyTyped
+
+    private void usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioActionPerformed
+       
+    }//GEN-LAST:event_usuarioActionPerformed
 
     /**
      * @param args the command line arguments
