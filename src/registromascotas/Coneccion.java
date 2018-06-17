@@ -8,7 +8,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 /**
  *
- * @author carlos o milton
+ * @author carlos 
  */
 public class Coneccion {
     
