@@ -9,6 +9,8 @@ public class RegistroMascotas {
 
     public static void main(String[] args) {
         // TODO code application logic here
+        LOGIN ventana = new LOGIN();
+        ventana.setVisible(true);
         
         
         
