@@ -18,6 +18,8 @@ public class REGISTRO extends javax.swing.JFrame {
         ResultSet rs=null;
         RegistroPropietarios RP = new RegistroPropietarios();
         registropropietario registrarP= new registropropietario();
+        registromascota registrarM = new registromascota();
+        boolean encontrado =false;
     /** Creates new form REGISTRO */
     public REGISTRO() {
         initComponents();
@@ -134,6 +136,7 @@ public class REGISTRO extends javax.swing.JFrame {
 
     private void registromascotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registromascotaActionPerformed
         // TODO add your handling code here:
+        encontrado=false;
         if(idpropietario.getText().equals("")){
             JOptionPane.showMessageDialog(null, "ingrese el Id de propietario");
         }
@@ -143,11 +146,15 @@ public class REGISTRO extends javax.swing.JFrame {
                 while (rs.next()){
                     if(rs.getString(1).equals(idpropietario.getText())){
                         this.setVisible(false);
-                        registrarP.setVisible(true);
+                        registrarM.setVisible(true);
+                        encontrado = true;
                     }
-                    else {
-                        JOptionPane.showMessageDialog(null, "no se encontro ningun propietario con ese Id", "AVISO DEL SISTEMA",0);
-                    }
+                  
+                }
+                if(encontrado==false){
+                  JOptionPane.showMessageDialog(null, "no se encontro ningun propietario con ese Id", "AVISO DEL SISTEMA",0);
+                  idpropietario.requestFocus();
+                  idpropietario.setText("");
                 }
             }catch (SQLException e){
                 

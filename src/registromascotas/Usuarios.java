@@ -19,8 +19,8 @@ public void modificar(String usuario, String contraseña){
 public void eliminar (String usuario){
     cn.UID("DELETE FROM usuarios WHERE usuario ='" + usuario + "'");
 }
-public ResultSet comparar (){
-    return (cn.getValores("SELECT * FROM usuarios"));
+public ResultSet comparar (String usuario){
+    return (cn.getValores("SELECT * FROM usuarios WHERE usuario= '" + usuario + "' "));
 }
 
     
