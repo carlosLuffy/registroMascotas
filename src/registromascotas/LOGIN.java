@@ -5,6 +5,8 @@
  */
 package registromascotas;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,6 +15,8 @@ import javax.swing.JOptionPane;
  */
 public class LOGIN extends javax.swing.JFrame {
      REGISTRO ventana2 = new REGISTRO();
+     Usuarios us = new Usuarios();
+     ResultSet rs = null;
        
     /**
      * Creates new form LOGIN
@@ -20,6 +24,7 @@ public class LOGIN extends javax.swing.JFrame {
     public LOGIN() {
         
         initComponents();
+        this.setTitle("REGISTRARME");
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         
@@ -55,6 +60,11 @@ public class LOGIN extends javax.swing.JFrame {
 
         login.setFont(new java.awt.Font("Comic Sans MS", 0, 11)); // NOI18N
         login.setText("Iniciar Secion ");
+        login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginActionPerformed(evt);
+            }
+        });
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("USUARIO:");
@@ -145,8 +155,26 @@ public class LOGIN extends javax.swing.JFrame {
         if (password.getText().length()<=8 && usuario.getText().length()<=5){
             JOptionPane.showMessageDialog(null, "CONTRASEÑA O USUARIO MUY CORTO");
         }
-        else {this.setVisible(false);
-             ventana2.setVisible(true);}
+        else {
+            rs = us.comparar();
+            try {
+             while (rs.next()){
+                 if(rs.getString(1).equals(usuario.getText())){
+                     JOptionPane.showMessageDialog(null, "el usuario ya existe elija otro", "AVISO DEL SISTEMA", 0);
+                     usuario.requestFocus();
+                 }
+                 else{
+                 us.insertar(usuario.getText(), password.getText());
+                 }
+             }
+             //rs.close();
+            }catch (SQLException e){
+                 //System.out.println(e.getMessage());
+                 //JOptionPane.showMessageDialog(rootPane, e.getMessage(), "AVISO DEL SISTEMA", 0);
+            }
+         
+        }
+        
         
     }//GEN-LAST:event_registrarActionPerformed
 
@@ -170,6 +198,24 @@ public class LOGIN extends javax.swing.JFrame {
     private void usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioActionPerformed
        
     }//GEN-LAST:event_usuarioActionPerformed
+
+    private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
+        // TODO add your handling code here:
+        rs=us.comparar();
+        try {
+            while(rs.next()){
+                if(rs.getString(1).equals(usuario.getText()) && rs.getString(2).equals(password.getText())){
+                    this.setVisible(false);
+                    ventana2.setVisible(true);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "el usuario o la contraseña son incorrectos", "AVISO DEL SISTEMA",0);
+                }
+            }
+        }catch (SQLException  e){
+           
+        }
+    }//GEN-LAST:event_loginActionPerformed
 
     /**
      * @param args the command line arguments

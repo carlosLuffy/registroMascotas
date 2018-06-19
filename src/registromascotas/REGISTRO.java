@@ -6,15 +6,23 @@
 
 package registromascotas;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author yese
  */
 public class REGISTRO extends javax.swing.JFrame {
-
+        ResultSet rs=null;
+        RegistroPropietarios RP = new RegistroPropietarios();
+        registropropietario registrarP= new registropropietario();
     /** Creates new form REGISTRO */
     public REGISTRO() {
         initComponents();
+        
+        this.setTitle("MENU");
          this.setResizable(false);
          this.setLocationRelativeTo(null);
          
@@ -75,16 +83,20 @@ public class REGISTRO extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(180, 180, 180)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(170, 170, 170)
-                .addComponent(idpropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(180, 180, 180)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(170, 170, 170)
+                        .addComponent(idpropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(registropropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
-                .addComponent(registromascota, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addComponent(registromascota, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,11 +105,11 @@ public class REGISTRO extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addComponent(idpropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(59, 59, 59)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(registropropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(registromascota))
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -116,10 +128,31 @@ public class REGISTRO extends javax.swing.JFrame {
 
     private void registropropietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registropropietarioActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
+        registrarP.setVisible(true);
     }//GEN-LAST:event_registropropietarioActionPerformed
 
     private void registromascotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registromascotaActionPerformed
         // TODO add your handling code here:
+        if(idpropietario.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "ingrese el Id de propietario");
+        }
+        else {
+            rs = RP.comparar(idpropietario.getText());
+            try {
+                while (rs.next()){
+                    if(rs.getString(1).equals(idpropietario.getText())){
+                        this.setVisible(false);
+                        registrarP.setVisible(true);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "no se encontro ningun propietario con ese Id", "AVISO DEL SISTEMA",0);
+                    }
+                }
+            }catch (SQLException e){
+                
+            }
+        }
     }//GEN-LAST:event_registromascotaActionPerformed
 
     private void idpropietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idpropietarioActionPerformed
