@@ -4,13 +4,25 @@
  * and open the template in the editor.
  */
 package registromascotas;
-
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
 /**
  *
  * @author yese
  */
 public class registropropietario extends javax.swing.JFrame {
-
+RegistroPropietarios RP = new RegistroPropietarios();
+ ResultSet rs = null;
+    boolean registro = false;
+    boolean prueba = false;
+    boolean newRecord = false;
+    int cantidad = 0;
+    int mayor = 0;
+    
+    
     /**
      * Creates new form registropropietario
      */
@@ -19,6 +31,34 @@ public class registropropietario extends javax.swing.JFrame {
           this.setTitle("REGISTRO DE PROPIETARIOS");
         this.setResizable(false);
         this.setLocationRelativeTo(null);
+        IdPropietario.setEnabled(false);
+    }
+        private void Bloquear(){
+        IdPropietario.setEnabled(false);
+        apellido1.setEnabled(false);
+        apellido2.setEnabled(false);
+        nombres.setEnabled(false);
+        fechaNacimiento.setEnabled(false);
+        masculino.setEnabled(false);
+        femenino.setEnabled(false);
+        celular.setEnabled(false);}
+
+    private void Desbloquear() {
+       apellido1.setEnabled(true);
+       apellido2.setEnabled(true);
+       nombres.setEnabled(true);
+       fechaNacimiento.setEnabled(true);
+       masculino.setEnabled(true);
+       femenino.setEnabled(true);
+       celular.setEnabled(true);}
+
+    private void Limpiar() {
+       apellido1.setText("");
+       apellido2.setText("");
+       nombres.setText("");
+       fechaNacimiento.setText("");
+       sexo.clearSelection();
+       celular.setText("");
     }
 
     /**
@@ -43,10 +83,8 @@ public class registropropietario extends javax.swing.JFrame {
         apellido1 = new javax.swing.JTextField();
         apellido2 = new javax.swing.JTextField();
         nombres = new javax.swing.JTextField();
-        fechaNacimiento = new javax.swing.JTextField();
         masculino = new javax.swing.JRadioButton();
         femenino = new javax.swing.JRadioButton();
-        celular = new javax.swing.JTextField();
         nuevoP = new javax.swing.JButton();
         guardarP = new javax.swing.JButton();
         cancelarP = new javax.swing.JButton();
@@ -54,6 +92,8 @@ public class registropropietario extends javax.swing.JFrame {
         guardarMP = new javax.swing.JButton();
         buscarP = new javax.swing.JButton();
         eliminarP = new javax.swing.JButton();
+        fechaNacimiento = new javax.swing.JFormattedTextField();
+        celular = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -95,24 +135,71 @@ public class registropropietario extends javax.swing.JFrame {
 
         nuevoP.setText("Nuevo");
         nuevoP.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        nuevoP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nuevoPActionPerformed(evt);
+            }
+        });
 
         guardarP.setText("Guardar");
         guardarP.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        guardarP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarPActionPerformed(evt);
+            }
+        });
 
         cancelarP.setText("Cancelar");
         cancelarP.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cancelarP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelarPActionPerformed(evt);
+            }
+        });
 
         modificarP.setText("Modificar");
         modificarP.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        modificarP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificarPActionPerformed(evt);
+            }
+        });
 
         guardarMP.setText("Guardar Modificaion");
         guardarMP.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        guardarMP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarMPActionPerformed(evt);
+            }
+        });
 
         buscarP.setText("Buscar");
         buscarP.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        buscarP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarPActionPerformed(evt);
+            }
+        });
 
         eliminarP.setText("Eliminar");
         eliminarP.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        eliminarP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarPActionPerformed(evt);
+            }
+        });
+
+        try {
+            fechaNacimiento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            celular.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -132,29 +219,28 @@ public class registropropietario extends javax.swing.JFrame {
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(eliminarP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(guardarMP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(guardarP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cancelarP, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                            .addComponent(buscarP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(33, 33, 33)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(IdPropietario)
                             .addComponent(apellido1)
                             .addComponent(apellido2)
                             .addComponent(nombres)
-                            .addComponent(fechaNacimiento)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(masculino)
                                 .addGap(18, 18, 18)
                                 .addComponent(femenino))
-                            .addComponent(celular, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(eliminarP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(guardarMP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(guardarP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cancelarP, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
-                            .addComponent(buscarP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(fechaNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                            .addComponent(celular))))
                 .addContainerGap(65, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -180,7 +266,7 @@ public class registropropietario extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(fechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -202,7 +288,7 @@ public class registropropietario extends javax.swing.JFrame {
                     .addComponent(buscarP, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE))
                 .addGap(30, 30, 30)
                 .addComponent(eliminarP, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -218,6 +304,290 @@ public class registropropietario extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void nuevoPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoPActionPerformed
+        // TODO add your handling code here:
+          rs = null;
+        //método en clase Clientes
+        rs = RP.contarRegistros();
+        try {
+            while (rs.next()) {
+                cantidad = rs.getInt(1);
+                if (cantidad != 0) {
+                    rs = null;
+                    rs = RP.mayorRegistro();
+                    while (rs.next()) {
+                        mayor = rs.getInt(1) + 1;
+                        if (mayor < 10) {
+                            IdPropietario.setText("000" + mayor);
+                        } else if (mayor < 100) {
+                            this.IdPropietario.setText("00" + mayor);
+                        } else if (mayor < 1000) {
+                            IdPropietario.setText("0" + mayor);
+                        } else if (mayor < 10000) {
+                            IdPropietario.setText("" + mayor);
+                        }
+                    }
+                } else {
+                    IdPropietario.setText("000"+1);
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "AVISO DEL SISTEMA", 0);
+        }
+        Desbloquear();
+        Limpiar();
+        this.apellido1.requestFocus();
+        newRecord = true;
+    }//GEN-LAST:event_nuevoPActionPerformed
+
+    private void guardarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarPActionPerformed
+        // TODO add your handling code here:
+           if (newRecord == true) {
+            if (this.IdPropietario.getText().equals("")) {
+                JOptionPane.showMessageDialog(rootPane, "Debe existir un código de cliente", "AVISO DEL SISTEMA", 2);
+            } else if (this.apellido1.getText().equals("")) {
+                JOptionPane.showMessageDialog(rootPane, "Debe llenar el campo Primer apellido", "AVISO DEL SISTEMA", 2);
+                this.apellido1.requestFocus();
+            } else if (this.nombres.getText().equals("")) {
+                JOptionPane.showMessageDialog(rootPane, "Debe llenar el campo Nombre", "AVISO DEL SISTEMA", 2);
+                this.nombres.requestFocus();
+            } else if (this.fechaNacimiento.getText().equals("  /  /    ")) {
+                JOptionPane.showMessageDialog(rootPane, "Debe llenar el campo FECHA DE NACIMIENTO!!", "AVISO DEL SISTEMA", 2);
+                this.fechaNacimiento.requestFocus();
+            } else if (masculino.isSelected()== false && femenino.isSelected()==false){
+                JOptionPane.showMessageDialog(rootPane, "Debe elegir el sexo", "AVISO DEL SISTEMA", 2);
+                masculino.requestFocus();
+            } else if (!this.fechaNacimiento.getText().equals("  /  /    ")) {
+                //validar fecha 
+                Date fechaActual = new Date();
+                SimpleDateFormat formato = new SimpleDateFormat("yyyyMMdd");
+                String cadenaFecha = formato.format(fechaActual);
+                String day = "" + cadenaFecha.charAt(6) + "" + cadenaFecha.charAt(7);
+                String month = "" + cadenaFecha.charAt(4) + "" + cadenaFecha.charAt(5);
+                String year = "" + cadenaFecha.charAt(0) + "" + cadenaFecha.charAt(1) + "" + cadenaFecha.charAt(2) + "" + cadenaFecha.charAt(3);
+                int d = Integer.parseInt(day);
+                int m = Integer.parseInt(month);
+                int y = Integer.parseInt(year);
+                String texto = this.fechaNacimiento.getText();
+                String dias = texto.charAt(0) + "" + texto.charAt(1);
+                String meses = texto.charAt(3) + "" + texto.charAt(4);
+                String anios = texto.charAt(6) + "" + texto.charAt(7) + "" + texto.charAt(8) + "" + texto.charAt(9);
+                int dia = Integer.parseInt(dias);
+                int mes = Integer.parseInt(meses);
+                int anio = Integer.parseInt(anios);
+                if ((dia <= 0) || (dia > 31)) {
+                    JOptionPane.showMessageDialog(rootPane, "El Dia de la fecha ingresada es invalida!!!", "AVISO DEL SISTEMA", 0);
+                    this.fechaNacimiento.setText("");
+                    this.fechaNacimiento.requestFocus();
+                } else if ((mes < 1) || (mes > 12)) {
+                    JOptionPane.showMessageDialog(rootPane, "El Mes de la fecha ingresada es invalida", "AVISO DEL SISTEMA", 0);
+                    this.fechaNacimiento.setText("");
+                    this.fechaNacimiento.requestFocus();
+                } else if ((anio > y)) {
+                    JOptionPane.showMessageDialog(rootPane, "El Año de la fecha ingresada no puede ser mayor al año actual (" + y + ")!!!", "AVISO DEL SISTEMA", 0);
+                    this.fechaNacimiento.setText("");
+                    this.fechaNacimiento.requestFocus();
+                } else if ((anio < 1920)) {
+                    JOptionPane.showMessageDialog(rootPane, "El Año de la fecha ingresada es incoherente!!!", "AVISO DEL SISTEMA", 0);
+                    this.fechaNacimiento.setText("");
+                    this.fechaNacimiento.requestFocus();
+                } else if ((anio == y) && (dia > d)) {
+                    if (d >= 10) {
+                        JOptionPane.showMessageDialog(rootPane, "El Dia de la fecha ingresada no puede ser mayor al dia actual (" + d + ")!!!", "AVISO DEL SISTEMA", 0);
+                        this.fechaNacimiento.setText("");
+                        this.fechaNacimiento.requestFocus();
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "El Dia de la fecha ingresada no puede ser mayor al dia actual (0" + d + ")!!!", "AVISO DEL SISTEMA", 0);
+                        this.fechaNacimiento.setText("");
+                        this.fechaNacimiento.requestFocus();
+                    }
+                } else if ((anio == y) && (mes > m)) {
+                    if (m >= 10) {
+                        JOptionPane.showMessageDialog(rootPane, "El Mes de la fecha ingresada no puede ser mayor al mes actual (" + m + ")!!!", "AVISO DEL SISTEMA", 0);
+                        this.fechaNacimiento.setText("");
+                        this.fechaNacimiento.requestFocus();
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "El Mes de la fecha ingresada no puede ser mayor al mes actual (0" + m + ")!!!", "AVISO DEL SISTEMA", 0);
+                        this.fechaNacimiento.setText("");
+                        this.fechaNacimiento.requestFocus();
+                    }
+                } else {
+                    if (this.celular.getText().equals("   -    ")) {
+                        JOptionPane.showMessageDialog(rootPane, "Debe llenar el campo CELULAR!!", "AVISO DEL SISTEMA", 2);
+                        this.celular.requestFocus();
+                    } else {
+                        //atentos, el sexo está con radio buttons
+                        if (masculino.isSelected()==true){
+                          RP.insertar(this.IdPropietario.getText(), this.apellido1.getText().toUpperCase(), this.apellido2.getText().toUpperCase(), this.nombres.getText().toUpperCase(), this.fechaNacimiento.getText(), "M", this.celular.getText()); }
+                        else{
+                          RP.insertar(this.IdPropietario.getText(), this.apellido1.getText().toUpperCase(), this.apellido2.getText().toUpperCase(), this.nombres.getText().toUpperCase(), this.fechaNacimiento.getText(), "F", this.celular.getText());}
+                        JOptionPane.showMessageDialog(rootPane, "Registro guardado exitosamente!!", "AVISO DEL SISTEMA", 1);
+                        Bloquear();
+                        Limpiar();
+                        this.IdPropietario.setText("");
+                        newRecord = false;
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_guardarPActionPerformed
+
+    private void cancelarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarPActionPerformed
+        // TODO add your handling code here:
+          Limpiar();
+        Bloquear();
+        this.IdPropietario.setText("");
+        newRecord = false;
+        prueba = false;
+    }//GEN-LAST:event_cancelarPActionPerformed
+
+    private void modificarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarPActionPerformed
+        // TODO add your handling code here:
+           if (prueba == true) {
+            Desbloquear();
+        }
+    }//GEN-LAST:event_modificarPActionPerformed
+
+    private void guardarMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarMPActionPerformed
+        // TODO add your handling code here:
+           if (prueba == true) {
+            if (this.IdPropietario.getText().equals("")) {
+                JOptionPane.showMessageDialog(rootPane, "Debe existir un código de cliente", "AVISO DEL SISTEMA", 2);
+            } else if (this.apellido1.getText().equals("")) {
+                JOptionPane.showMessageDialog(rootPane, "Debe llenar el campo Primer apellido", "AVISO DEL SISTEMA", 2);
+                this.apellido1.requestFocus();
+            } else if (this.nombres.getText().equals("")) {
+                JOptionPane.showMessageDialog(rootPane, "Debe llenar el campo Nombre", "AVISO DEL SISTEMA", 2);
+                this.nombres.requestFocus();
+            } else if (this.fechaNacimiento.getText().equals("  /  /    ")) {
+                JOptionPane.showMessageDialog(rootPane, "Debe llenar el campo FECHA DE NACIMIENTO!!", "AVISO DEL SISTEMA", 2);
+                this.fechaNacimiento.requestFocus();
+            } else if (masculino.isSelected()== false && femenino.isSelected()==false){
+                JOptionPane.showMessageDialog(rootPane, "Debe elegir el sexo", "AVISO DEL SISTEMA", 2);
+                masculino.requestFocus();
+            } else if (!this.fechaNacimiento.getText().equals("  /  /    ")) {
+                //validar fecha 
+                Date fechaActual = new Date();
+                SimpleDateFormat formato = new SimpleDateFormat("yyyyMMdd");
+                String cadenaFecha = formato.format(fechaActual);
+                String day = "" + cadenaFecha.charAt(6) + "" + cadenaFecha.charAt(7);
+                String month = "" + cadenaFecha.charAt(4) + "" + cadenaFecha.charAt(5);
+                String year = "" + cadenaFecha.charAt(0) + "" + cadenaFecha.charAt(1) + "" + cadenaFecha.charAt(2) + "" + cadenaFecha.charAt(3);
+                int d = Integer.parseInt(day);
+                int m = Integer.parseInt(month);
+                int y = Integer.parseInt(year);
+                String texto = this.fechaNacimiento.getText();
+                String dias = texto.charAt(0) + "" + texto.charAt(1);
+                String meses = texto.charAt(3) + "" + texto.charAt(4);
+                String anios = texto.charAt(6) + "" + texto.charAt(7) + "" + texto.charAt(8) + "" + texto.charAt(9);
+                int dia = Integer.parseInt(dias);
+                int mes = Integer.parseInt(meses);
+                int anio = Integer.parseInt(anios);
+                if ((dia <= 0) || (dia > 31)) {
+                    JOptionPane.showMessageDialog(rootPane, "El Dia de la fecha ingresada es invalida!!!", "AVISO DEL SISTEMA", 0);
+                    this.fechaNacimiento.setText("");
+                    this.fechaNacimiento.requestFocus();
+                } else if ((mes < 1) || (mes > 12)) {
+                    JOptionPane.showMessageDialog(rootPane, "El Mes de la fecha ingresada es invalida", "AVISO DEL SISTEMA", 0);
+                    this.fechaNacimiento.setText("");
+                    this.fechaNacimiento.requestFocus();
+                } else if ((anio > y)) {
+                    JOptionPane.showMessageDialog(rootPane, "El Año de la fecha ingresada no puede ser mayor al año actual (" + y + ")!!!", "AVISO DEL SISTEMA", 0);
+                    this.fechaNacimiento.setText("");
+                    this.fechaNacimiento.requestFocus();
+                } else if ((anio < 1920)) {
+                    JOptionPane.showMessageDialog(rootPane, "El Año de la fecha ingresada es incoherente!!!", "AVISO DEL SISTEMA", 0);
+                    this.fechaNacimiento.setText("");
+                    this.fechaNacimiento.requestFocus();
+                } else if ((anio == y) && (dia > d)) {
+                    if (d >= 10) {
+                        JOptionPane.showMessageDialog(rootPane, "El Dia de la fecha ingresada no puede ser mayor al dia actual (" + d + ")!!!", "AVISO DEL SISTEMA", 0);
+                        this.fechaNacimiento.setText("");
+                        this.fechaNacimiento.requestFocus();
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "El Dia de la fecha ingresada no puede ser mayor al dia actual (0" + d + ")!!!", "AVISO DEL SISTEMA", 0);
+                        this.fechaNacimiento.setText("");
+                        this.fechaNacimiento.requestFocus();
+                    }
+                } else if ((anio == y) && (mes > m)) {
+                    if (m >= 10) {
+                        JOptionPane.showMessageDialog(rootPane, "El Mes de la fecha ingresada no puede ser mayor al mes actual (" + m + ")!!!", "AVISO DEL SISTEMA", 0);
+                        this.fechaNacimiento.setText("");
+                        this.fechaNacimiento.requestFocus();
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "El Mes de la fecha ingresada no puede ser mayor al mes actual (0" + m + ")!!!", "AVISO DEL SISTEMA", 0);
+                        this.fechaNacimiento.setText("");
+                        this.fechaNacimiento.requestFocus();
+                    }
+                } else {
+                    if (this.celular.getText().equals("   -    ")) {
+                        JOptionPane.showMessageDialog(rootPane, "Debe llenar el campo CELULAR!!", "AVISO DEL SISTEMA", 2);
+                        this.celular.requestFocus();
+                    } else {
+                        //atentos, el sexo está con radio buttons
+                        if (masculino.isSelected()==true){
+                          RP.modificar(this.IdPropietario.getText(), this.apellido1.getText().toUpperCase(), this.apellido2.getText().toUpperCase(), this.nombres.getText().toUpperCase(), this.fechaNacimiento.getText(), "M", this.celular.getText()); }
+                        else{
+                          RP.modificar(this.IdPropietario.getText(), this.apellido1.getText().toUpperCase(), this.apellido2.getText().toUpperCase(), this.nombres.getText().toUpperCase(), this.fechaNacimiento.getText(), "F", this.celular.getText());}
+                        JOptionPane.showMessageDialog(rootPane, "El registro ha sido exitosamente actualizado!!", "AVISO DEL SISTEMA", 1);
+                        Bloquear();
+                        Limpiar();
+                        this.IdPropietario.setText("");
+                        newRecord = false;
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_guardarMPActionPerformed
+
+    private void buscarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarPActionPerformed
+        // TODO add your handling code here:
+         String codigo = JOptionPane.showInputDialog("Ingrese el código de empleado a búscar:");
+        rs = RP.buscar(codigo);
+        try {
+            while (rs.next()){
+                this.IdPropietario.setText(rs.getString(1));
+                this.apellido1.setText(rs.getString(2));
+                this.apellido2.setText(rs.getString(3));
+                this.nombres.setText(rs.getString(4));
+                this.fechaNacimiento.setText(rs.getString(5));
+                if (rs.getString(6).equals("M")){
+                    masculino.setSelected(true);}
+                else{
+                    femenino.setSelected(true);
+                }
+                this.celular.setText(rs.getString(7));
+                prueba = true;
+                registro = true;
+                newRecord = false;
+            }
+            if (registro == false) {
+                JOptionPane.showMessageDialog(rootPane, "Registro no encontrado!!!", "AVISO DEL SISTEMA", 0);
+                //this.txtCodigo.setText("");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "AVISO DEL SISTEMA", 0);
+        }
+        registro = false;
+        Bloquear();
+    }//GEN-LAST:event_buscarPActionPerformed
+
+    private void eliminarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarPActionPerformed
+        // TODO add your handling code here:
+             if (prueba == true) {
+            String codigo = this.IdPropietario.getText();
+            if (JOptionPane.showConfirmDialog(rootPane, "¿Desea eliminar el registro búscado?") == 0) {
+                RP.eliminar(codigo);
+                JOptionPane.showMessageDialog(rootPane, "Registro eliminado exitosamente!!", "AVISO DEL SISTEMA", 1);
+                Bloquear();
+                Limpiar();
+                this.IdPropietario.setText("");
+                prueba = false;
+            }
+        }
+    }//GEN-LAST:event_eliminarPActionPerformed
 
     /**
      * @param args the command line arguments
@@ -260,9 +630,9 @@ public class registropropietario extends javax.swing.JFrame {
     private javax.swing.JTextField apellido2;
     private javax.swing.JButton buscarP;
     private javax.swing.JButton cancelarP;
-    private javax.swing.JTextField celular;
+    private javax.swing.JFormattedTextField celular;
     private javax.swing.JButton eliminarP;
-    private javax.swing.JTextField fechaNacimiento;
+    private javax.swing.JFormattedTextField fechaNacimiento;
     private javax.swing.JRadioButton femenino;
     private javax.swing.JButton guardarMP;
     private javax.swing.JButton guardarP;
