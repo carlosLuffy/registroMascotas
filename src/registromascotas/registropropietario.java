@@ -5,6 +5,9 @@
  */
 package registromascotas;
 
+import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author yese
@@ -87,6 +90,29 @@ public class registropropietario extends javax.swing.JFrame {
         jLabel7.setText("celular:");
         jLabel7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
+        apellido1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                apellido1ActionPerformed(evt);
+            }
+        });
+        apellido1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                apellido1KeyTyped(evt);
+            }
+        });
+
+        apellido2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                apellido2KeyTyped(evt);
+            }
+        });
+
+        nombres.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nombresKeyTyped(evt);
+            }
+        });
+
         sexo.add(masculino);
         masculino.setText("masculino");
 
@@ -148,9 +174,8 @@ public class registropropietario extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(eliminarP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(guardarMP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(guardarP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(guardarMP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(guardarP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(27, 27, 27)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cancelarP, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
@@ -218,6 +243,34 @@ public class registropropietario extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void apellido1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apellido1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_apellido1ActionPerformed
+
+    private void apellido1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apellido1KeyTyped
+       char letra= evt.getKeyChar();
+            if ((((letra<'a' || letra>'z') && (letra<'A' || letra>'Z')) && (letra!= KeyEvent.VK_BACK_SPACE) && (letra!=evt.VK_SPACE ))){
+           evt.consume();
+           JOptionPane.showMessageDialog(null,"INGRESE SOLO LETRAS");
+            }
+    }//GEN-LAST:event_apellido1KeyTyped
+
+    private void apellido2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apellido2KeyTyped
+         char letra= evt.getKeyChar();
+            if ((((letra<'a' || letra>'z') && (letra<'A' || letra>'Z')) && (letra!= KeyEvent.VK_BACK_SPACE) && (letra!=evt.VK_SPACE ))){
+           evt.consume();
+           JOptionPane.showMessageDialog(null,"INGRESE SOLO LETRAS");
+            }
+    }//GEN-LAST:event_apellido2KeyTyped
+
+    private void nombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nombresKeyTyped
+        char letra= evt.getKeyChar();
+            if ((((letra<'a' || letra>'z') && (letra<'A' || letra>'Z')) && (letra!= KeyEvent.VK_BACK_SPACE) && (letra!=evt.VK_SPACE ))){
+           evt.consume();
+           JOptionPane.showMessageDialog(null,"INGRESE SOLO LETRAS");
+            }
+    }//GEN-LAST:event_nombresKeyTyped
 
     /**
      * @param args the command line arguments

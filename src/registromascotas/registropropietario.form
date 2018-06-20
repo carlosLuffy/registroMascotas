@@ -236,10 +236,20 @@
         <Component class="javax.swing.JTextField" name="IdPropietario">
         </Component>
         <Component class="javax.swing.JTextField" name="apellido1">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="apellido1ActionPerformed"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="apellido1KeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="apellido2">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="apellido2KeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="nombres">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="nombresKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="fechaNacimiento">
         </Component>

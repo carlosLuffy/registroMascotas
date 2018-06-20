@@ -6,6 +6,7 @@
 
 package registromascotas;
 
+import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -77,6 +78,11 @@ public class REGISTRO extends javax.swing.JFrame {
         idpropietario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 idpropietarioActionPerformed(evt);
+            }
+        });
+        idpropietario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                idpropietarioKeyTyped(evt);
             }
         });
 
@@ -165,6 +171,15 @@ public class REGISTRO extends javax.swing.JFrame {
     private void idpropietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idpropietarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_idpropietarioActionPerformed
+
+    private void idpropietarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_idpropietarioKeyTyped
+         char numero= evt.getKeyChar();
+            if (((numero<'0' || numero>'9') && numero!= KeyEvent.VK_BACK_SPACE)){
+           evt.consume();
+           JOptionPane.showMessageDialog(null,"INGRESE SOLO NUMEROS");
+           
+       }
+    }//GEN-LAST:event_idpropietarioKeyTyped
 
     /**
      * @param args the command line arguments
